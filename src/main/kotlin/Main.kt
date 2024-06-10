@@ -83,7 +83,7 @@ fun main() {
             ctx.res().contentType = "image/png"
             ctx.result(outputStream.toByteArray())
         }
-        .start(7070)
+        .start(80)
 
 
 }
