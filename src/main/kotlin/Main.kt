@@ -10,7 +10,7 @@ val logger = LoggerFactory.getLogger("Main")
 
 private fun getWrappedLines(text: String, fm: FontMetrics, widthLimit: Int): List<String> {
     val lines = mutableListOf<String>()
-    val words = text.split(" ")
+    val words = text.split("_")
     var currentLine = StringBuilder()
 
     for (word in words) {
