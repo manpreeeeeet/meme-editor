@@ -44,7 +44,7 @@ fun main() {
     boxes += Rect(586, 277, 689, 298, Color.WHITE)
     val app = Javalin.create(/*config*/)
         .get("/{msg}") { ctx ->
-            val image = ImageIO.read(File("src/main/resources/just_need_to.png"))
+            val image = ImageIO.read(File("just_need_to.png"))
             val msg = ctx.pathParam("msg")
             val graphics = image.graphics
 
