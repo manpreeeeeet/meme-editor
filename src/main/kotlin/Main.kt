@@ -4,7 +4,6 @@ import java.awt.Color
 import java.awt.Font
 import java.awt.FontMetrics
 import java.io.ByteArrayOutputStream
-import java.io.File
 import javax.imageio.ImageIO
 
 val logger = LoggerFactory.getLogger("Main")
@@ -44,7 +43,7 @@ fun main() {
     boxes += Rect(586, 277, 689, 298, Color.WHITE)
     val app = Javalin.create(/*config*/)
         .get("/{msg}") { ctx ->
-            val image = ImageIO.read(File("just_need_to.png"))
+            val image = ImageIO.read(object {}.javaClass.getResourceAsStream("just_need_to.png"))
             val msg = ctx.pathParam("msg")
             val graphics = image.graphics
 
@@ -83,7 +82,7 @@ fun main() {
             ctx.res().contentType = "image/png"
             ctx.result(outputStream.toByteArray())
         }
-        .start(80)
+        .start(7070)
 
 
 }
