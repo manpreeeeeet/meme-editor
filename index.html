@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<img id="myImg" src="http://localhost:7070/test" alt="">
+<textarea id="memeText"></textarea>
+
+
+<script>
+    const m = document.getElementById("myImg")
+    const memeText = document.getElementById("memeText")
+    m.onclick = (e) => {
+        console.log(e.offsetX, e.offsetY)
+        m.setAttribute("src", `http://localhost:7070/${memeText.value}`)
+    }
+
+    memeText.oninput = () => {
+        m.setAttribute("src", `http://localhost:7070/${memeText.value}`)
+    }
+</script>
+</body>
+</html>
