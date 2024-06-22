@@ -14,6 +14,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("io.javalin:javalin:6.1.3")
     implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.17.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
 }
 
 application {
