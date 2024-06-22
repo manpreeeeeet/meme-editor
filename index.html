@@ -5,20 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-<img id="myImg" src="http://localhost:7070/test" alt="">
+<img id="myImg" src="http://localhost:8080/test" alt="">
 <textarea id="memeText"></textarea>
 
 
 <script>
+    const url = "http://localhost:8080/gif/uwu"
     const m = document.getElementById("myImg")
     const memeText = document.getElementById("memeText")
     m.onclick = (e) => {
         console.log(e.offsetX, e.offsetY)
-        m.setAttribute("src", `http://localhost:7070/${memeText.value}`)
+        m.setAttribute("src", `${url}/${memeText.value}`)
     }
 
     memeText.oninput = () => {
-        m.setAttribute("src", `http://localhost:7070/${memeText.value}`)
+        m.setAttribute("src", `${url}/${memeText.value}`)
     }
 </script>
 </body>

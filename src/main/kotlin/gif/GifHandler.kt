@@ -18,7 +18,7 @@ object GifHandler : Handler {
 
         val gifReader = GifReader(inputGifStream)
         val frames = gifReader.extractFrames()
-        frames.addTextToFrames(textToAdd, Point(180, 220), Point(400, 110))
+        frames.addTextToFrames(textToAdd, Point(180, 220), Point(180, 220))
 
 
         val outputStream = ByteArrayOutputStream()

@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage
 import kotlin.math.pow
 
 object GifEditor {
-    fun BufferedImage.addTextToFrame(text: String, x: Int, y: Int) {
+    private fun BufferedImage.addTextToFrame(text: String, x: Int, y: Int) {
         val frame = this
         val graphics = frame.graphics
         graphics.font = Font("Arial", Font.BOLD, 40);
@@ -18,9 +18,12 @@ object GifEditor {
 
     fun List<GifFrame>.addTextToFrames(text: String, start: Point, end: Point) {
         val points = interpolatePoints(start, end, this.size)
+        val frames = this
         for (i in points.indices) {
-            val image = this[i].image
-            image.addTextToFrame(text, points[i].x, points[i].y)
+            val point = points[i]
+            val frame = frames[i]
+            val image = frames[i].image
+            image.addTextToFrame(text, point.x - frame.leftPosition, point.y - frame.topPosition)
         }
     }
 
