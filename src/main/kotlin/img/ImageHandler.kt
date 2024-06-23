@@ -4,14 +4,18 @@ import common.Config
 import img.ImageUtils.Companion.getWrappedLines
 import io.javalin.http.Context
 import java.awt.Font
+import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
 object ImageHandler {
 
     fun handle(ctx: Context, config: Config, textToAdd: String) {
-
         val image = ImageIO.read(object {}.javaClass.getResourceAsStream("/${config.filename}"))
+        handle(image, ctx, config, textToAdd)
+    }
+
+    fun handle(image: BufferedImage, ctx: Context, config: Config, textToAdd: String) {
         val graphics = image.createGraphics()
 
         for (box in config.textboxes) {

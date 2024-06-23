@@ -14,6 +14,6 @@ data class Rect(
     @JsonSerialize(using = ConfigSerializer::class)
     @JsonDeserialize(using = ConfigDeserializer::class)
     val color: Color = Color.BLACK,
-    val start: Float = 1.0F,
+    val start: Float = 0.0F,
     val end: Float = 1.0F
 )

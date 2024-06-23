@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meme Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+</head>
+<body>
+<div class="myroot">
+    <div class="help">
+        <h3>Help</h3>
+        <div>
+            <hr>
+            <li>x1, x2, y1, y2 are the 4 coordinates of the textbox</li>
+            <hr>
+            <li>You can add multiple textboxes</li>
+            <hr>
+            <li>start and end are optional. start: 0.6 means this text box should be displayed after 60% of gif has been
+                animated
+            </li>
+            <hr>
+            <li>color: Color of the text. WHITE and BLACK are the only two options</li>
+            <hr>
+            <hr>
+            <h5>Once you are satisfied with your changes, copy the config and open a PR with your config and meme
+                file
+            </h5>
+        </div>
+    </div>
+    <div class="left">
+        <h3>CONFIG</h3>
+        <form id="configForm" action="/test" method="post" enctype="multipart/form-data">
+            <div>
+                <textarea id="memeConfig" name="memeConfig" rows="20" cols="50" required>
+{
+  "filename": "shoot.gif",
+  "textboxes": [
+    {
+      "x1": 320,
+      "y1": 178,
+      "x2": 477,
+      "y2": 239,
+      "start": 0.6,
+      "end": 1,
+      "color": "BLACK"
+    }
+  ]
+}
+                </textarea>
+            </div>
+            <div>
+                <label for="memeText">Text To Add:</label>
+                <input type="text" id="memeText" name="memeText" required>
+            </div>
+            <div>
+                <label for="file">Choose file:</label>
+                <input type="file" id="file" name="memeFile" required>
+            </div>
+            <div>
+                <button type="submit">Upload</button>
+            </div>
+        </form>
+    </div>
+    <div class="right">
+        <div class="right-container">
+            <h3 class="heading">Preview Image</h3>
+            <img id="previewImage" src="" alt="">
+        </div>
+    </div>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html>

@@ -13,10 +13,13 @@ import javax.imageio.metadata.IIOMetadata
 
 object GifHandler {
     private val lruCache = LRUCache<String, Pair<IIOMetadata, List<GifFrame>>>(10)
+
     fun handle(ctx: Context, config: Config, textToAdd: String) {
         val cached = getOrInitializeCache(config.filename)
-        val streamMetadata = cached.first
-        val frames = cached.second
+        handle(cached.first, cached.second, ctx, config, textToAdd)
+    }
+
+    fun handle(streamMetadata: IIOMetadata, frames: List<GifFrame>, ctx: Context, config: Config, textToAdd: String) {
 
         val graphics = frames[0].image.createGraphics()
         for (box in config.textboxes) {

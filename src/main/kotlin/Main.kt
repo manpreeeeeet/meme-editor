@@ -1,4 +1,5 @@
 import common.RequestHandler
+import contrib.ContribHandler
 import io.javalin.Javalin
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,12 +12,15 @@ fun main(args: Array<String>) {
 
 
     Javalin.create { config ->
-        config.bundledPlugins.enableDevLogging()
+        config.staticFiles.add("/public")
         config.requestLogger.http { ctx, ms ->
             val req = ctx.req()
             logger.info("Request: ${req.method} ${req.requestURL} | Response: ${ctx.res().status} | Time: ${ms}ms")
         }
-    }.get("<memeName>/{textToAdd}", RequestHandler).start(port)
+    }
+        .get("<memeName>/{textToAdd}", RequestHandler)
+        .post("test", ContribHandler)
+        .start(port)
 
 
 }
