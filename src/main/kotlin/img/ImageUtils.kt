@@ -1,6 +1,7 @@
 package img
 
 import java.awt.FontMetrics
+import java.awt.image.BufferedImage
 
 class ImageUtils {
     companion object {
@@ -27,5 +28,11 @@ class ImageUtils {
 
             return lines
         }
+
+        fun BufferedImage.copyBufferedImage(): BufferedImage {
+            val source = this
+            return BufferedImage(source.colorModel, source.copyData(null), source.isAlphaPremultiplied, null)
+        }
+
     }
 }

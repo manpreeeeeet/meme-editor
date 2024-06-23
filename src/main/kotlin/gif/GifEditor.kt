@@ -7,23 +7,31 @@ import java.awt.image.BufferedImage
 import kotlin.math.pow
 
 object GifEditor {
-    private fun BufferedImage.addTextToFrame(text: String, x: Int, y: Int) {
+    private fun BufferedImage.addTextToFrame(text: String, fontSize: Int, color: Color, x: Int, y: Int) {
         val frame = this
         val graphics = frame.graphics
-        graphics.font = Font("Arial", Font.BOLD, 40);
-        graphics.color = Color.WHITE
+        graphics.font = Font("Arial", Font.BOLD, fontSize);
+        graphics.color = color
         graphics.drawString(text, x, y)
         graphics.dispose()
     }
 
-    fun List<GifFrame>.addTextToFrames(text: String, start: Point, end: Point) {
-        val points = interpolatePoints(start, end, this.size)
-        val frames = this
+    fun List<GifFrame>.addTextToFrames(
+        text: String,
+        fontSize: Int,
+        start: Point,
+        end: Point,
+        startTime: Float = 0F,
+        endTime: Float = 1.0F,
+        color: Color
+    ) {
+        val framesToModify = this.subList((this.size * startTime).toInt(), (this.size * endTime).toInt())
+        val points = interpolatePoints(start, end, framesToModify.size)
         for (i in points.indices) {
             val point = points[i]
-            val frame = frames[i]
-            val image = frames[i].image
-            image.addTextToFrame(text, point.x - frame.leftPosition, point.y - frame.topPosition)
+            val frame = framesToModify[i]
+            val image = framesToModify[i].image
+            image.addTextToFrame(text, fontSize, color, point.x - frame.leftPosition, point.y - frame.topPosition)
         }
     }
 

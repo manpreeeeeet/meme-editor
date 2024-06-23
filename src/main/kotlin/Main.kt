@@ -1,5 +1,4 @@
-import gif.GifHandler
-import img.ImageHandler
+import common.RequestHandler
 import io.javalin.Javalin
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -14,7 +13,7 @@ fun main() {
             val req = ctx.req()
             logger.info("Request: ${req.method} ${req.requestURL} | Response: ${ctx.res().status} | Time: ${ms}ms")
         }
-    }.get("/gif/{gif_name}/{text}", GifHandler).get("/{msg}", ImageHandler).start(8080)
+    }.get("<memeName>/{textToAdd}", RequestHandler).start(80)
 
 
 }

@@ -1,34 +1,25 @@
 package img
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import common.Config
 import img.ImageUtils.Companion.getWrappedLines
 import io.javalin.http.Context
-import io.javalin.http.Handler
 import java.awt.Font
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
-object ImageHandler : Handler {
-    private val objectMapper = jacksonObjectMapper()
+object ImageHandler {
 
+    fun handle(ctx: Context, config: Config, textToAdd: String) {
 
-    override fun handle(ctx: Context) {
-        val image = ImageIO.read(object {}.javaClass.getResourceAsStream("/just_need_to.png"))
-        val configString = String(object {}.javaClass.getResourceAsStream("/just_need_to.json")!!.readAllBytes())
-        val config: Config = objectMapper.readValue(configString)
-
-        val msg = ctx.pathParam("msg")
+        val image = ImageIO.read(object {}.javaClass.getResourceAsStream("/${config.filename}"))
         val graphics = image.createGraphics()
 
-        var fontSize = 18
-
         for (box in config.textboxes) {
+            var fontSize = 18
             var fits = false
             while (!fits) {
                 graphics.font = Font("Roboto Flex", Font.BOLD, fontSize)
-                val wrappedLines = getWrappedLines(msg, graphics.fontMetrics, box.x2 - box.x1)
+                val wrappedLines = getWrappedLines(textToAdd, graphics.fontMetrics, box.x2 - box.x1)
 
                 // Calculate the total height of the wrapped text
                 val textBlockHeight = wrappedLines.size * graphics.fontMetrics.height
@@ -39,7 +30,7 @@ object ImageHandler : Handler {
                     fontSize--; // Decrease font size
                 }
             }
-            val wrappedLines = getWrappedLines(msg, graphics.fontMetrics, box.x2 - box.x1)
+            val wrappedLines = getWrappedLines(textToAdd, graphics.fontMetrics, box.x2 - box.x1)
             graphics.color = box.color
             for ((idx, line) in wrappedLines.withIndex()) {
                 graphics.drawString(

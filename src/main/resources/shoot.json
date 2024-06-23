@@ -1,0 +1,14 @@
+{
+  "filename": "shoot.gif",
+  "textboxes": [
+    {
+      "x1": 320,
+      "y1": 178,
+      "x2": 477,
+      "y2": 239,
+      "start": 0.6,
+      "end": 1,
+      "color": "BLACK"
+    }
+  ]
+}

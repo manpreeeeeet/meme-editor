@@ -1,31 +1,82 @@
 package gif
 
+import common.Config
+import common.LRUCache
 import gif.GifEditor.addTextToFrames
+import img.ImageUtils.Companion.copyBufferedImage
+import img.ImageUtils.Companion.getWrappedLines
 import io.javalin.http.Context
-import io.javalin.http.Handler
+import java.awt.Font
 import java.awt.Point
 import java.io.ByteArrayOutputStream
+import javax.imageio.metadata.IIOMetadata
 
-object GifHandler : Handler {
-    override fun handle(ctx: Context) {
-        val textToAdd = ctx.pathParam("text")
-        val inputGifName = ctx.pathParam("gif_name") + ".gif"
-        val offsetX = ctx.req().getParameter("x")?.toInt() ?: 0
-        val offsetY = ctx.req().getParameter("y")?.toInt() ?: 0
+object GifHandler {
+    private val lruCache = LRUCache<String, Pair<IIOMetadata, List<GifFrame>>>(10)
+    fun handle(ctx: Context, config: Config, textToAdd: String) {
+        val cached = getOrInitializeCache(config.filename)
+        val streamMetadata = cached.first
+        val frames = cached.second
 
+        val graphics = frames[0].image.createGraphics()
+        for (box in config.textboxes) {
+            var fontSize = 40
+            var fits = false
+            while (!fits) {
+                graphics.font = Font("Arial", Font.BOLD, fontSize)
+                val wrappedLines = getWrappedLines(textToAdd, graphics.fontMetrics, box.x2 - box.x1)
 
-        val inputGifStream = object {}.javaClass.getResourceAsStream("/$inputGifName")!!
-
-        val gifReader = GifReader(inputGifStream)
-        val frames = gifReader.extractFrames()
-        frames.addTextToFrames(textToAdd, Point(180, 220), Point(180, 220))
+                // Calculate the total height of the wrapped text
+                val textBlockHeight = wrappedLines.size * graphics.fontMetrics.height
+                val boxHeight = box.y2 - box.y1
+                if (textBlockHeight <= boxHeight) {
+                    fits = true;
+                } else {
+                    fontSize--; // Decrease font size
+                }
+            }
+            val wrappedLines = getWrappedLines(textToAdd, graphics.fontMetrics, box.x2 - box.x1)
+            for ((idx, line) in wrappedLines.withIndex()) {
+                frames.addTextToFrames(
+                    line,
+                    fontSize,
+                    Point(box.x1, box.y1 + graphics.fontMetrics.height + (graphics.fontMetrics.height * idx)),
+                    Point(box.x1, box.y1 + graphics.fontMetrics.height + (graphics.fontMetrics.height * idx)),
+                    box.start,
+                    box.end,
+                    box.color
+                )
+            }
+        }
 
 
         val outputStream = ByteArrayOutputStream()
-        val writer = GifWriter(outputStream, gifReader.streamMetadata, frames.map { it.image to it.metadata })
-        writer.writeFrames()
+        GifWriter(outputStream, streamMetadata, frames.map { it.image to it.metadata }).writeFrames()
 
         ctx.res().contentType = "image/gif"
         ctx.result(outputStream.toByteArray())
+    }
+
+    private fun getOrInitializeCache(filename: String): Pair<IIOMetadata, List<GifFrame>> {
+        var cached = lruCache.get(filename)
+        var streamMetadata = cached?.first
+        var frames = cached?.second?.map {
+            GifFrame(
+                it.image.copyBufferedImage(), it.metadata, it.leftPosition, it.topPosition, it.delay
+            )
+        }
+        if (cached == null) {
+            val inputGifStream = object {}.javaClass.getResourceAsStream("/${filename}")!!
+            val gifReader = GifReader(inputGifStream)
+            val framesRead = gifReader.extractFrames()
+            lruCache.put(filename, gifReader.streamMetadata to framesRead)
+            streamMetadata = gifReader.streamMetadata
+            frames = framesRead.map {
+                GifFrame(
+                    it.image.copyBufferedImage(), it.metadata, it.leftPosition, it.topPosition, it.delay
+                )
+            }
+        }
+        return streamMetadata!! to frames!!
     }
 }
