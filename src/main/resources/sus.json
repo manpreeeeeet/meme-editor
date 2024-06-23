@@ -1,0 +1,23 @@
+{
+  "filename": "sus.gif",
+  "textboxes": [
+    {
+      "x1": 160,
+      "y1": 109,
+      "x2": 275,
+      "y2": 213,
+      "start": 0,
+      "end": 0.4,
+      "color": "WHITE"
+    },
+    {
+      "x1": 260,
+      "y1": 89,
+      "x2": 335,
+      "y2": 193,
+      "start": 0.6,
+      "end": 1,
+      "color": "WHITE"
+    }
+  ]
+}
