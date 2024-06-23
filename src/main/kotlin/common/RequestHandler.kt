@@ -18,7 +18,7 @@ object RequestHandler : Handler {
 
         when (config.filename.substringAfter(".")) {
             "png" -> ImageHandler.handle(ctx, config, textToAdd)
-            "gif" -> GifHandler.handle(ctx, config, textToAdd)
+            "gif" -> GifHandler.handle(ctx, config, textToAdd.substringBefore(".gif"))
             else -> ctx.status(500)
         }
 
