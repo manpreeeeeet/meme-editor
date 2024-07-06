@@ -24,7 +24,7 @@ object ContribHandler : Handler {
         when (memeFile.contentType()) {
             "image/png" -> {
                 val image = ImageIO.read(memeFile.content())
-                ImageHandler.handle(image, ctx, config, "abc")
+                ImageHandler.handle(image, ctx, config, memeText)
             }
 
             "image/gif" -> {
