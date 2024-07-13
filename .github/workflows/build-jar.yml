@@ -40,7 +40,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: meme-editor-jar
-          path: build/libs/meme-editor-1.0-standalone.jar
+          path: build/libs/
       - name: echo files
         run: ls -lh build/libs/
 
