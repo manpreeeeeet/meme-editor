@@ -1,8 +1,10 @@
 name: Build the Jar File
 run-name: ${{ github.actor }} triggered a jar build
 on: [ push ]
+env:
+  IMAGE_NAME: meme-editor
 jobs:
-  Build-Jar-File:
+  build-jar-file:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repository code
@@ -16,4 +18,28 @@ jobs:
           cache-dependency-path: |
             **/.gradle*
             **/gradle-wrapper.properties
-      - run: ./gradlew build
+      - run:
+          ./gradlew build
+  push-to-docker:
+    needs: [ build-jar-file ]
+    runs-on: ubuntu-22.04
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        #
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # This changes all uppercase characters to lowercase.
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          docker tag $IMAGE_NAME $IMAGE_ID
+          docker push $IMAGE_ID
+
