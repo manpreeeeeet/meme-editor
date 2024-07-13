@@ -24,7 +24,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: meme-editor-jar
-          path: build/libs/meme-editor-1.0.jar
+          path: build/libs/meme-editor-1.0-standalone.jar
           overwrite: true
   push-to-docker:
     needs: [ build-jar-file ]
@@ -40,7 +40,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: meme-editor-jar
-          path: build/libs/meme-editor-1.0.jar
+          path: build/libs/meme-editor-1.0-standalone.jar
           overwrite: true
 
       - name: Build image
