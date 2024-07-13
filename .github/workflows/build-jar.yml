@@ -41,7 +41,8 @@ jobs:
         with:
           name: meme-editor-jar
           path: build/libs/meme-editor-1.0-standalone.jar
-          overwrite: true
+      - name: echo files
+        run: ls -lh build/libs/
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
