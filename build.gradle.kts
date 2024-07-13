@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.manpreet"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ tasks {
                 "processResources"
             )
         ) // We need this for Gradle optimization to work
-        archiveClassifier.set("standalone") // Naming the jar
+        archiveClassifier.set("") // Naming the jar
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         manifest { attributes(mapOf("Main-Class" to application.mainClass)) } // Provided we set it up in the application plugin configuration
         val sourcesMain = sourceSets.main.get()
